@@ -26,7 +26,7 @@ function evolution() {
 	var sibl_count = 0;	// количество соседей клетки 
 	var must_die = [];	// массив клеток, которые погибнут
 	var must_birth = [];	// массив клеток, которые родятся
-	var pole=document.getElementById("pole");	// поле, собственно место действия 
+	var pole=document.getElementById("pole");	// поле, собственно, место действия 
 	var rows_length = pole.rows.length;	// число строк поля 
 	var cells_length = pole.rows[0].cells.length;	// число столбцов поля
 
@@ -63,7 +63,8 @@ function evolution() {
 				if (pole.rows[i+1].cells[j+1].classList.contains('set')) { sibl_count++; }
 			}
 			
-			// если клетка живая и у нее меньше 2 или больше 3 соседей, то по правилам она должна погибнуть (от одиночества или перенаселения соответственно)
+			// если клетка живая и у нее меньше двух или больше трёх соседей, 
+			// то по правилам она должна погибнуть (от одиночества или перенаселения соответственно)
 			if (pole.rows[i].cells[j].classList.contains('set')) {
 				if ((sibl_count < 2) || (sibl_count > 3)) {
 					// добавляем ее в массив клеток, которые должны погибнуть
@@ -85,7 +86,7 @@ function evolution() {
 	for (var i=0; i < rows_length; i++) {
 		for (var j=0; j < cells_length; j++) {
 			
-			// если клетка живая и она есть в массиве тех, которые должны погибнуть, то ... ей придется погибнуть... это всего лишь игра, ничего личного...=)
+			// если клетка живая и она есть в массиве тех, которые должны погибнуть, то убиваем её
 			if (pole.rows[i].cells[j].classList.contains('set')) {
 				if (find_in_array(must_die, ""+i+""+j) !== -1) {
 					pole.rows[i].cells[j].classList.remove('set');  // просто убираем у нее класс 'set', остальное сделает css
@@ -100,29 +101,29 @@ function evolution() {
 		}
 	}	
 	
-	if ($("#button_start").val() == "СТОП!") {				
-		timeout_id = setTimeout(evolution, 2000);	// снова запускаем таймер на 2сек (2000 мсек) (рекурсия)
+	if ($("#button_start").val() == "СТОП") {				
+		timeout_id = setTimeout(evolution, 1000);	// снова запускаем таймер (рекурсия)
 	}
 }
 //-----------------------------------------------------------------------------------------
 
-//начать развиваться-----------------------------------------------------------------------
-function start_evol() {
+//начать развитие-----------------------------------------------------------------------
+function start_evolution() {
 	
 	var $button_start = $("#button_start");
 
-	if ($button_start.val() == "Начать развиваться") {	// запустили развитие
+	if ($button_start.val() == "Начать развитие") {	// запустили развитие
 		
-		$button_start.val("СТОП!");	
+		$button_start.val("СТОП");	
 		$("#button_step_next").prop("disabled", true);
 		$('td').off('click');	// убираем обработчик клика, дабы не мешать развитию жизни
-		timeout_id = setTimeout(evolution, 2000);	// запускаем таймер на 2сек (2000 мсек), который запускает функцию evolution()
+		timeout_id = setTimeout(evolution, 1000);	// запускаем таймер, который запускает функцию evolution()
 		return;
 		
-	} else {	// остановили разитие
+	} else {	// остановили развитие
 		
 		clearTimeout(timeout_id);	// останавливаем таймер
-		$button_start.val("Начать развиваться");
+		$button_start.val("Начать развитие");
 		$("#button_step_next").prop("disabled", false);
 		$('td').on('click', function() {	// снова вешаем обработчик клика т.к развитие остановлено
 			$(this).toggleClass("set")
